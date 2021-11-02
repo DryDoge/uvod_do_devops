@@ -18,14 +18,14 @@ jobs:
           with:
             node-version: 10
 
-        - name: Cache node modules
+        - name: Cache Node Modules
           uses: actions/cache@v2
           with: 
             path: node_modules
             key: node_modules-${{ hashFiles('**/package-lock.json') }}
             restore-keys: node_modules-
 
-        - name: Install with npm
+        - name: Install With npm
           run: |
             npm ci 
 
@@ -43,7 +43,7 @@ jobs:
           with:
             node-version: 10
 
-        - name: Load cached modules
+        - name: Load Cached Modules
           uses: actions/cache@v2
           with: 
             path: node_modules
@@ -69,12 +69,12 @@ jobs:
           with:
             node-version: 10
 
-        - name: Load cached modules
+        - name: Load Cached Modules
           uses: actions/cache@v2
           with: 
             path: node_modules
             key: node_modules-${{ hashFiles('**/package-lock.json') }}
 
-        - name: run tests
+        - name: Run Tests
           run: |
-            npm run test
+            npm run test -- --colors
