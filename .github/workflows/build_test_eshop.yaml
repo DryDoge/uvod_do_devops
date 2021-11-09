@@ -1,7 +1,11 @@
 name: Build and tests our Eshop
-
 on:
-  workflow_dispatch:
+  push:
+      branches:
+        - main
+    pull_request:
+      branches:
+        - main
 
 jobs:
   # Install all dependencies
@@ -111,3 +115,8 @@ jobs:
       
       - name: Deploy to firebase
         run: ./node_modules/.bin/firebase deploy --token ${{ secrets.FIREBASE_TOKEN }}
+
+        #bezat workflow pri pull requeste do masteru
+        #bezat workflow pri push do masteru
+        #urobit main protected aby neslo pushovat priamo 
+        #urobit checky Install Build a Test povinne aby bez nich neslo mergovat
