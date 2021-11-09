@@ -92,7 +92,7 @@ jobs:
   Deploy:
     needs: [Build, Test]
     runs-on: ubuntu-latest
-    if: ${{ github.ref == 'rest/heads/main' }}
+    if: ${{ github.ref == 'refs/heads/main' }}
     steps:
         - name: Git Checkout
           uses: actions/checkout@v2.4.0
