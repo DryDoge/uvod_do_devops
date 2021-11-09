@@ -50,10 +50,20 @@ jobs:
             key: node_modules-${{ hashFiles('**/package-lock.json') }}
 
         - name: Build
-          #Pipe tam je na 
           run: |
             npm rebuild node-sass --force
             npm run build -- --colors
+        
+        - name: Cache Node Modules and files
+          uses: actions/cache@v2
+          with: 
+            path: |
+              ./node_modules 
+              ~/.npm 
+              ./build
+            key: ${{ runner.os}}-build-${{ github.run_id }}
+            restore-keys: |
+              ${{ runner.os}}-build-${{ github.run_id }}
 
   Test:
     needs: Install
@@ -78,3 +88,28 @@ jobs:
         - name: Run Tests
           run: |
             npm run test -- --colors
+
+  Deploy:
+    needs: [Build, Test]
+    runs-on: ubuntu-latest
+    if: ${{ github.ref == 'rest/heads/main' }}
+    steps:
+        - name: Git Checkout
+          uses: actions/checkout@v2.4.0
+          with: 
+            token: ${{ secrets.TEST_TOKEN }}
+
+        - name: Cache Node Modules and files
+          uses: actions/cache@v2
+          with: 
+            path: |
+              ~/.npm 
+              ./node_modules 
+              ./build
+            key: ${{ runner.os}}-build-${{ github.run_id }}
+
+        - name: Deploy to Firebase
+          run: |
+            ./node_modules/.bin/firebase deploy --token ${{ secrets.FIREBASE_TOKEN }}
+
+            
